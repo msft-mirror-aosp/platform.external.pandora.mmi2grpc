@@ -25,7 +25,7 @@ class BuildGrpc(Command):
 
         proto_include = pkg_resources.resource_filename('grpc_tools', '_proto')
 
-        files = [f'blueberry/{f}' for f in os.listdir('proto/blueberry') if f.endswith('.proto')]
+        files = [f'pandora/{f}' for f in os.listdir('proto/pandora') if f.endswith('.proto')]
         protoc.main([
             'grpc_tools.protoc',
             '-Iproto',
@@ -46,7 +46,7 @@ class BuildPyCommand(build_py):
 setup(
     name='mmi2grpc',
     version='0.0.1',
-    packages=['mmi2grpc', 'blueberry'],
+    packages=['mmi2grpc', 'pandora'],
     install_requires=[
         'grpcio',
     ],

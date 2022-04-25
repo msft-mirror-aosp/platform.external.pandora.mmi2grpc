@@ -47,7 +47,7 @@ def format_proxy(profile, id, description):
         f'from ._description import assert_description\n'
         f'from ._proxy import ProfileProxy\n'
         f'\n'
-        f'from blueberry.{profile.lower()}_grpc import {profile}\n'
+        f'from pandora.{profile.lower()}_grpc import {profile}\n'
         f'\n'
         f'\n'
         f'class {profile}Proxy(ProfileProxy):\n'

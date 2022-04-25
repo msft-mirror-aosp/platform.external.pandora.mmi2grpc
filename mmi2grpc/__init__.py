@@ -3,7 +3,7 @@ import grpc
 import time
 import sys
 
-from blueberry.host_grpc import Host
+from pandora.host_grpc import Host
 
 from .a2dp import A2DPProxy
 from ._description import format_proxy
@@ -62,7 +62,7 @@ class IUT:
             f'Missing {profile} proxy and mmi: {interaction}\n'
             f'Create a {profile.lower()}.py in mmi2grpc/:\n\n{code}\n'
             f'Then, instantiate the corresponding proxy in __init__.py\n'
-            f'Finally, create a {profile.lower()}.proto in proto/blueberry/'
+            f'Finally, create a {profile.lower()}.proto in proto/pandora/'
             f'and generate the corresponding interface.'
         )
         assert False, error_msg

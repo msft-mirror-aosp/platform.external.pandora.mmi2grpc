@@ -1,0 +1,3 @@
+[submodule "bt-test-interfaces"]
+	path = proto
+	url = sso://pandora/bt-test-interfaces
