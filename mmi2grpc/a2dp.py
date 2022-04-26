@@ -1,20 +1,42 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""A2DP proxy module."""
+
 import time
 from typing import Optional
 
-from pandora.a2dp_grpc import A2DP
-from pandora.host_grpc import Host
+from grpc import RpcError
 
+from mmi2grpc._audio import AudioSignal
+from mmi2grpc._helpers import assert_description
+from mmi2grpc._proxy import ProfileProxy
+from pandora.a2dp_grpc import A2DP
 from pandora.a2dp_pb2 import Sink, Source, PlaybackAudioRequest
+from pandora.host_grpc import Host
 from pandora.host_pb2 import Connection
 
-from ._audio import AudioSignal
-from ._description import assert_description
-from ._proxy import ProfileProxy
-
-AUDIO_AMPLITUDE = 0.8
+AUDIO_SIGNAL_AMPLITUDE = 0.8
+AUDIO_SIGNAL_SAMPLING_RATE = 44100
 
 
 class A2DPProxy(ProfileProxy):
+    """A2DP proxy.
+
+    Implements A2DP and AVDTP PTS MMIs.
+    """
+
     connection: Optional[Connection] = None
     sink: Optional[Sink] = None
     source: Optional[Source] = None
@@ -25,12 +47,12 @@ class A2DPProxy(ProfileProxy):
         self.host = Host(channel)
         self.a2dp = A2DP(channel)
 
-        def convert_frame(data): return PlaybackAudioRequest(
-            data=data, source=self.source)
+        def convert_frame(data):
+            return PlaybackAudioRequest(data=data, source=self.source)
         self.audio = AudioSignal(
             lambda frames: self.a2dp.PlaybackAudio(map(convert_frame, frames)),
-            AUDIO_AMPLITUDE,
-            44100
+            AUDIO_SIGNAL_AMPLITUDE,
+            AUDIO_SIGNAL_SAMPLING_RATE
         )
 
     @assert_description
@@ -58,7 +80,7 @@ class A2DPProxy(ProfileProxy):
                 else:
                     self.source = self.a2dp.WaitSource(
                         connection=self.connection).source
-            except:
+            except RpcError:
                 pass
         else:
             self.connection = self.host.WaitConnection(
@@ -66,7 +88,7 @@ class A2DPProxy(ProfileProxy):
             try:
                 self.sink = self.a2dp.WaitSink(
                     connection=self.connection).sink
-            except:
+            except RpcError:
                 pass
         return "OK"
 
