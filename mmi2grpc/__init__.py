@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entry point to mmi2grpc."""
+"""Map Bluetooth PTS Man Machine Interface to Pandora gRPC calls."""
+
+__version__ = "0.0.1"
 
 from typing import List
 import time

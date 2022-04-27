@@ -1,4 +1,4 @@
-build
+dist
 __pycache__
 pandora/*
 !pandora/__init__.py

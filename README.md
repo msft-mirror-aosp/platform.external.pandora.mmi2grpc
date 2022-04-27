@@ -3,11 +3,15 @@
 ## Install
 
 ```bash
-pip3 install -r requirements.txt
+git submodule update --init
+
+pip install -e . # With editable mode
+# Or
+pip install . # Without editable mode
 ```
 
-## Build grpc interfaces
+## Rebuild gRPC interfaces
 
 ```bash
-./setup.py build_grpc
+./_build/grpc.py
 ```
